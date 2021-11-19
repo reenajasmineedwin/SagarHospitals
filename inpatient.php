@@ -513,7 +513,7 @@
        </li>
         
         <li>
-          <label class="container">g. Company Recommendation / Empanelment
+          <label class="container contain">g. Company Recommendation
             <input type="checkbox">
             <span class="checkmark"></span>
           </label>
