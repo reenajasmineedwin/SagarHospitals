@@ -55,21 +55,21 @@
     $Twentyfive = $_POST['twentyfive'];
 
 
-    $query=mysqli_query($con,"insert into Personal_details values('$PName','$DName','$UHID',$Gender', $Age,'$MobNo','$LandlineNo','$Email')");
+    $query=mysqli_query($con,"insert into Personal_details(PatientName,DoctorName,UHID_No,Gender,Age,MobileNo, LandlineNo,Emailid) values('$PName','$DName','$UHID','$Gender','$Age','$MobNo','$LandlineNo','$Email')");
     
     $pos = mysqli_query($con,"select ID from Personal_details where UHID_No='$UHID' ORDER BY ID DESC LIMIT 1");
     $posresult = mysqli_fetch_assoc($pos);
     $posres =  $posresult['ID'];
 
 
-    $query1 = mysqli_query($con,"insert into Admission_Experience('$posres','$One','$Two')");
-    $query2 = mysqli_query($con,"insert into Nursing_Experience('$posres','$Three','$Four','$Five')");
-    $query3 = mysqli_query($con,"insert into Dietary('$posres','$Six','$Seven','$Eight')");
-    $query4 = mysqli_query($con,"insert into Doctor_and_Room_Experience('$posres','$Nine','$Ten','$Eleven','$Twelve')");
-    $query5 = mysqli_query($con,"insert into Patient_Care('$posres','$Thirteen','$Fourteen')");
-    $query6 = mysqli_query($con,"insert into Diagnostic_and_Ancilliary_Services('$posres','$Fifteen','$Sixteen','$Seventeen','$Eighteen','$Nineteen')");
-    $query7 = mysqli_query($con,"insert into Billing_and_Discharge('$posres','$Twenty','$Twentyone')");
-    $query8 = mysqli_query($con,"insert into Security_and_Overall_Exp('$posres','$Twentytwo','$Twentythree','$Twentyfour','$Twentyfive')");
+     $query1 = mysqli_query($con,"insert into Admission_Experience values('$posres','$One','$Two')");
+    $query2 = mysqli_query($con,"insert into Nursing_Experience values('$posres','$Three','$Four','$Five')");
+    $query3 = mysqli_query($con,"insert into Dietary values('$posres','$Six','$Seven','$Eight')");
+    $query4 = mysqli_query($con,"insert into Doctor_and_Room_Experience values('$posres','$Nine','$Ten','$Eleven','$Twelve')");
+    $query5 = mysqli_query($con,"insert into Patient_Care values('$posres','$Thirteen','$Fourteen')");
+    $query6 = mysqli_query($con,"insert into Diagnostic_and_Ancilliary_Services values('$posres','$Fifteen','$Sixteen','$Seventeen','$Eighteen','$Nineteen')");
+    $query7 = mysqli_query($con,"insert into Billing_and_Discharge values('$posres','$Twenty','$Twentyone')");
+    $query8 = mysqli_query($con,"insert into Security_and_Overall_Exp values('$posres','$Twentytwo','$Twentythree','$Twentyfour','$Twentyfive')");
   
 }
 ?>
