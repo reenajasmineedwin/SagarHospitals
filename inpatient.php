@@ -1,6 +1,6 @@
 <?php
   session_start(); 
-  include('config.php');
+  include('inconfig.php');
 
   if(isset($_POST['submit'])){
   
@@ -13,7 +13,7 @@
 
     $Email = $_POST['email'];
     $UHID = $_POST['uhid'];
-
+    $Date=$_POST['date'];
     $One = $_POST['one'];
     $Two = $_POST['two'];
 
@@ -53,23 +53,81 @@
     $Twentythree = $_POST['twentythree'];
     $Twentyfour = $_POST['twentyfour'];
     $Twentyfive = $_POST['twentyfive'];
+    $Team_member=$_POST['team_member'];
+    $OtherFeedback=$_POST['otherfeedback'];
+     
+
+    $checkbox1=$_POST['filled'];  
+    $chk="";  
+     foreach($checkbox1 as $chk1)  
+   {  
+      $chk .= $chk1.",";  
+   } 
+    $Relation=$_POST['relation'];
+
+    //reason
+    $v = $_POST['v'];
+    $Other=$_POST['other'];
 
 
-    $query=mysqli_query($con,"insert into Personal_details(PatientName,DoctorName,UHID_No,Gender,Age,MobileNo, LandlineNo,Emailid) values('$PName','$DName','$UHID','$Gender','$Age','$MobNo','$LandlineNo','$Email')");
+    $query=mysqli_query($con,"insert into Personal_details(PatientName,DoctorName,UHID_No,Gender,Age,MobileNo, LandlineNo,Emailid,Date) values('$PName','$DName','$UHID','$Gender','$Age','$MobNo','$LandlineNo','$Email','$Date')");
     
     $pos = mysqli_query($con,"select ID from Personal_details where UHID_No='$UHID' ORDER BY ID DESC LIMIT 1");
     $posresult = mysqli_fetch_assoc($pos);
     $posres =  $posresult['ID'];
 
 
-     $query1 = mysqli_query($con,"insert into Admission_Experience values('$posres','$One','$Two')");
+    $query1 = mysqli_query($con,"insert into Admission_Experience values('$posres','$One','$Two')");
     $query2 = mysqli_query($con,"insert into Nursing_Experience values('$posres','$Three','$Four','$Five')");
     $query3 = mysqli_query($con,"insert into Dietary values('$posres','$Six','$Seven','$Eight')");
     $query4 = mysqli_query($con,"insert into Doctor_and_Room_Experience values('$posres','$Nine','$Ten','$Eleven','$Twelve')");
     $query5 = mysqli_query($con,"insert into Patient_Care values('$posres','$Thirteen','$Fourteen')");
     $query6 = mysqli_query($con,"insert into Diagnostic_and_Ancilliary_Services values('$posres','$Fifteen','$Sixteen','$Seventeen','$Eighteen','$Nineteen')");
     $query7 = mysqli_query($con,"insert into Billing_and_Discharge values('$posres','$Twenty','$Twentyone')");
-    $query8 = mysqli_query($con,"insert into Security_and_Overall_Exp values('$posres','$Twentytwo','$Twentythree','$Twentyfour','$Twentyfive')");
+    $query8 = mysqli_query($con,"insert into Security_and_Overall_Exp values('$posres','$Twentytwo','$Twentythree','$Twentyfour','$Twentyfive','$Team_member','$OtherFeedback','$chk','$Relation')");
+
+    $query9=mysqli_query($con,"insert into Reason (ID) values('$posres')");
+
+      for($u=0; $u < count($v); $u++){
+
+            $temp = $v[$u];
+
+            if($temp == "Location"){
+                $sql ="update Reason set Location='Yes' where ID='$posres'";
+            }
+            if($temp == "Specific Services offered"){
+                   $sql ="update Reason set Specific_Services_offered ='Yes' where ID='$posres'";
+            }
+            if($temp == "Referred by doctor"){
+                   $sql ="update Reason set Referred_by_doctor ='Yes' where ID='$posres'";
+            }
+            if($temp == "Friend / Family Recommendation"){
+                 $sql ="update Reason set Friend_Family_Recommendation='Yes' where ID='$posres'";
+            }
+            if($temp == "Previous Experience"){
+                 $sql ="update Reason set Previous_Experience='Yes' where ID='$posres'";
+            }
+            if($temp == "Your Doctor's Availability"){
+                   $sql ="update Reason set Your_Doctor_Availability='Yes' where ID='$posres'";
+            }
+            if($temp == "Company Recommendation"){
+                 $sql ="update Reason set Company_Recommendation='Yes' where ID='$posres'";
+            }
+     
+            $query10 = mysqli_query($con, $sql);
+    }
+
+
+ $sql11 ="update Reason set Other='$Other' where ID='$posres'";
+
+   $query11 = mysqli_query($con, $sql11);
+
+
+
+
+   
+
+
   
 }
 ?>
@@ -128,20 +186,20 @@
                         <div class="form-row"><!--div6 open-->
                             <div class="name" style="margin-top: 15px"> Patient Name</div>
                             <div class="value">
-                                <input class="input--style-6" type="text" name="pname">
+                                <input class="input--style-6" type="text" name="pname" required>
                             </div>
                                 <div class="name" style="margin-top: 15px">Doctor Name</div>
                             <div class="value">
-                                <input class="input--style-6" type="text" name="drname">
+                                <input class="input--style-6" type="text" name="drname" required>
                             </div>
 
                               <div class="name" style="margin-top: 15px">Date</div>
                             <div class="value">
-                                <input class="input--style-6" type="date" name="date">
+                                <input class="input--style-6" type="date" name="date" required>
                             </div>
                            <div class="name" style="margin-top: 15px;"> UHID Number</div>
                             <div class="value">
-                                <input class="input--style-6" type="text" name="uhid">
+                                <input class="input--style-6" type="text" name="uhid" required>
                             </div>
                                 <div class="name" style="margin-top: 15px">Male/Female</div>
                             <div class="value">
@@ -153,21 +211,21 @@
 
                             <div class="name" style="margin-top: 15px">Age&nbsp&nbsp&nbsp</div>
                             <div class="value">
-                                <input class="input--style-6" type="number" name="age">
+                                <input class="input--style-6" type="number" name="age" required>
                             </div>
 
                             <div class="name" style="margin-top: 15px">Mobile No.&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div><br>
 
-                                <div class="value"><input class="input--style-6" type="text" name="mobile"></div>
+                                <div class="value"><input class="input--style-6" type="text" name="mobile" required></div>
 
                 
                                 <div class="name" style="margin-top: 15px">Landline No .</div><br>
 
-                                <div class="value"><input class="input--style-6" type="text" name="landline"></div>
+                                <div class="value"><input class="input--style-6" type="text" name="landline" required></div>
 
                               <div class="name" style="margin-top: 15px">Email</div><br>
 
-                                <div class="value"><input class="input--style-6" type="email" name="email"></div>
+                                <div class="value"><input class="input--style-6" type="email" name="email" required></div>
                                </div><!--div 6 close-->
 
 <div class="form-row">Dear Guest, <br>Thank you for choosing Sagar Hospitals.We at Sagar,constantly strive to match our services to the expectations of our customers.We are committed to provide world class health to all.To help us serve you better,please spare a few minutes to record your impressions of our hospital services.Your opinion is of immense value to us.</div> 
@@ -473,14 +531,14 @@
         
        <li>
           <label class="container">a. Location
-            <input type="checkbox" >
+            <input type="checkbox" name="v[]" value="Location">
             <span class="checkmark"></span>
           </label>
        </li>
 
        <li>
           <label class="container">b. Specific Services offered
-            <input type="checkbox" >
+            <input type="checkbox"   name="v[]" value="Specific Services offered">
             <span class="checkmark"></span>
           </label>
        </li>
@@ -488,43 +546,46 @@
 
        <li>
           <label class="container">c. Referred by doctor
-            <input type="checkbox" >
+            <input type="checkbox"  name="v[]" value="Referred by doctor">
             <span class="checkmark"></span>
           </label>
        </li>
         
        <li>
           <label class="container">d. Friend / Family Recommendation
-            <input type="checkbox">
+            <input type="checkbox" name="v[]" value="Friend / Family Recommendation">
             <span class="checkmark"></span>
           </label>
        </li>
         
        <li>
           <label class="container">e. Previous Experience
-            <input type="checkbox">
+            <input type="checkbox" name="v[]" value="Previous Experience">
             <span class="checkmark"></span>
           </label>
        </li>
         
        <li>
           <label class="container">f. Your Doctor's Availability
-            <input type="checkbox">
+            <input type="checkbox" name="v[]" value="Your Doctor's Availability">
             <span class="checkmark"></span>
           </label>
        </li>
         
         <li>
           <label class="container contain">g. Company Recommendation
-            <input type="checkbox">
+            <input type="checkbox" name="v[]" value="Company Recommendation">
             <span class="checkmark"></span>
           </label>
        </li>
           
+        </ul>
+
+          
         
        
         
-       </ul>
+       
 
 
     </div>
@@ -537,13 +598,14 @@
  
 
 
+<div>Others (Please specify):<input type="text" name="other" id="other" class="input--style-6" style="max-width: 50%;margin-left: 10px"></div>
 
 </div>
 
 <div >
     <div class="name" style="margin-top: 15px ;margin-left:10px;margin-bottom: 2px;">Please help us recognize a team member who may have performed services beyond your expectations</div>
     <div class="value">
-    <textarea class="textarea--style-6 "style="
+    <textarea name="team_member" class="textarea--style-6 "style="
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -557,12 +619,12 @@
     <div class="name" style="margin-top: 15px; margin-left:10px">Would you like to provide any other feedback or suggestion which would help us deliver better
     experience</div>
     <div class="value">
-    <textarea class="textarea--style-6 "style="
+    <textarea   name="otherfeedback" class="textarea--style-6 "style="
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 100%;
-}" ></textarea>
+}" required></textarea>
     </div>
 </div>
 <div style="border-bottom: 5px solid #e5e5e5; margin-top: 10px;margin-bottom: 10px"></div>
@@ -588,14 +650,14 @@
         
        <li>
           <label class="container"> Self
-            <input type="checkbox" >
+            <input type="checkbox" name="filled[]" value="Self">
             <span class="checkmark"></span>
           </label>
        </li>
 
        <li>
           <label class="container"> Attendent
-            <input type="checkbox" >
+            <input type="checkbox" name="filled[]" value="Attendent" >
             <span class="checkmark"></span>
           </label>
        </li>
@@ -608,7 +670,7 @@
     </div>
 
 </div>
-Relationship to the Patient (in case of Attendent)<input type="text" class="input--style-6" style="max-width: 50%;margin-left: 10px"></div>
+Relationship to the Patient (in case of Attendent)<input name="relation" type="text" class="input--style-6" style="max-width: 50%;margin-left: 10px"></div>
 <div style="border-bottom: 5px solid #e5e5e5; margin-top: 10px" ></div>
 <center style="font-weight: bold; margin-top: 10px">Thank you for sharing your experience</center>
 

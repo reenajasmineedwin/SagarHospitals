@@ -1,3 +1,134 @@
+<?php
+  session_start(); 
+  include('outconfig.php');
+
+  if(isset($_POST['submit'])){
+    
+  //personal details
+    $PName = $_POST['pname'];
+    $DName = $_POST['drname'];
+    $Gender = $_POST['gender'];
+    $Age = $_POST['age'];
+    $MobNo = $_POST['mobile'];
+    $LandlineNo = $_POST['landline'];
+
+    $Email = $_POST['email'];
+    $UHID = $_POST['uhid'];
+    $Date=$_POST['date'];
+
+  //Reception Experience
+    $One = $_POST['one'];
+    $Two = $_POST['two'];
+  //Registration Experience
+    $Three = $_POST['three'];
+    $Four = $_POST['four'];
+    $Five = $_POST['five'];
+  //consultation and nursing Exp
+    $Six = $_POST['six'];
+    $Seven = $_POST['seven'];
+  //Diagnostic and Ancillary Services
+    $Nine = $_POST['nine'];
+    $Ten = $_POST['ten'];
+    $Eleven = $_POST['eleven'];
+    //overall exp
+       $Twelve = $_POST['twelve'];
+       
+       $Thirteen = $_POST['thirteen'];
+       $Fourteen = $_POST['fourteen'];
+
+
+    $Team_member=$_POST['team_member'];
+    $OtherFeedback=$_POST['otherfeedback'];
+     
+
+    $checkbox1=$_POST['filled'];  
+    $chk="";  
+     foreach($checkbox1 as $chk1)  
+   {  
+      $chk .= $chk1.",";  
+   } 
+    $Relation=$_POST['relation'];
+
+    //Reason
+    $v = $_POST['v'];
+    $Other=$_POST['other'];
+
+
+    $query=mysqli_query($con,"insert into Personal_details (PatientName,DoctorName,UHID_No,Gender,Age,MobileNo,LandlineNo,Emailid,Date) values('$PName','$DName','$UHID','$Gender','$Age','$MobNo','$LandlineNo','$Email','$Date')");
+    $pos = mysqli_query($con,"select ID from Personal_details where UHID_No='$UHID' ORDER BY ID DESC LIMIT 1");
+    $posresult = mysqli_fetch_assoc($pos);
+    $posres =  $posresult['ID'];
+
+
+    $query1 = mysqli_query($con,"insert into Reception_Experience values('$posres','$One','$Two')");
+    $query2 = mysqli_query($con,"insert into Registration_Experience values('$posres','$Three','$Four','$Five')");
+    $query3 = mysqli_query($con,"insert into Consultation_and_Nursing_Experience values('$posres','$Six','$Seven')");
+    $query4 = mysqli_query($con,"insert into Diagnostic_and_Ancillary_Services values('$posres','$Nine','$Ten','$Eleven')");
+  
+    $query5 = mysqli_query($con,"insert into  Overall_Experience values('$posres','$Twelve','$Thirteen','$Fourteen','$Team_member','$OtherFeedback','$chk','$Relation')");
+
+    $query6=mysqli_query($con,"insert into Reason (ID) values('$posres')");
+
+      for($u=0; $u < count($v); $u++){
+
+            $temp = $v[$u];
+
+            if($temp == "Location"){
+                $sql ="update Reason set Location='Yes' where ID='$posres'";
+            }
+            if($temp == "Specific Services offered"){
+                   $sql ="update Reason set Specific_Services_offered ='Yes' where ID='$posres'";
+            }
+            if($temp == "Referred by doctor"){
+                   $sql ="update Reason set Referred_by_doctor ='Yes' where ID='$posres'";
+            }
+            if($temp == "Friend / Family Recommendation"){
+                 $sql ="update Reason set Friend_Family_Recommendation='Yes' where ID='$posres'";
+            }
+            if($temp == "Previous Experience"){
+                 $sql ="update Reason set Previous_Experience='Yes' where ID='$posres'";
+            }
+            if($temp == "Your Doctor's Availability"){
+                   $sql ="update Reason set Your_Doctor_Availability='Yes' where ID='$posres'";
+            }
+            if($temp == "Company Recommendation"){
+                 $sql ="update Reason set Company_Recommendation='Yes' where ID='$posres'";
+            }
+     
+            $query10 = mysqli_query($con, $sql);
+    }
+
+
+ $sql7 ="update Reason set Other='$Other' where ID='$posres'";
+
+   $query7 = mysqli_query($con, $sql7);
+
+
+
+
+   
+
+
+  
+}
+
+
+
+
+
+  ?>
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -436,7 +567,7 @@ Relationship to the Patient (in case of Attendent)<input name="relation" type="t
 
                 </div>
                 <div class="card-footer">
-                  <center>  <button class="btn btn--radius-2 btn--red" type="submit" >Send Feedback</button></center>
+                  <center>  <input class="btn btn--radius-2 btn--red" type="submit" name="submit">Send Feedback</input></center>
                 </div>
             </div>
         </div>
